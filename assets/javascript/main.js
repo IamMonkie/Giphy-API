@@ -1,6 +1,6 @@
 $(document).ready(function () {
   createButton();
-  // goButton();
+  goButton();
 
   $("#buttonContainer").on("click", ".animal-btn", function(event) {
     console.log("hit")
@@ -10,42 +10,43 @@ $(document).ready(function () {
     let animal = $(this).attr("data-name");
     // Create Query URL
     let queryURL = "http://api.giphy.com/v1/gifs/search?q=" + animal + "&api_key=etI6oymnFWc2axcUGIrsEv4jRn32lOtK&limit=10";
-
+    
     $.ajax({
       url: queryURL,
       method: "GET"
-    }).then(function(response) {
-      // $("#gifContainer").text(JSON.stringify(response));
-      
+    }).then(function(response) {      
 
       let results = response.data;
       var animalDiv = $("<div>");
       
-      $("#gifContainer").prepend(animalImage);
+      // $("#gifContainer").prepend(animalImage);
 
       for (let i = 0; i < results.length; i++) {
 
         // Only taking action if the photo has an appropriate rating
         if (results[i].rating !== "r" && results[i].rating !== "pg-13") {
 
-          var p = $("<p>").text("Rating: " + results[i].rating);
-          
+          let p = $("<p>").text("Rating: " + results[i].rating);
+          let animalImage = $("<img>");
+
           animalImage.attr("src", results[i].images.fixed_height.url);
 
-          animalDiv.append(p);
-          gifDiv.append(animalImage);
+          // gifDiv.append(p);
+          gifDiv.prepend(animalImage);
 
           // Prepending the gifDiv to the gifContainer in the HTML
           $("#gifContainer").prepend(gifDiv);
+          
           console.log("YAY", gifDiv);
         }
       }
     });
   });
 
-  $("#gifContainer").on("click", ".animalImage", function(){
+  $("#gifContainer").on("click", "#animalImage", function(){
+    console.log("clicked " + animalImage)
     let state = $(this).attr("data-state");
-    let source = $(this).html("#gif");
+    let source = $(this).html("#gifDiv");
 
     if(state === 'still'){
 
@@ -60,7 +61,6 @@ $(document).ready(function () {
       $(this).attr('data-state', 'still');
     }
   })
-  
 }) // document.ready close
 
 //--------------------------------------------------------------------------
