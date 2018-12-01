@@ -10,6 +10,7 @@ body {
     border-radius: .3em;
     border-color: rgb(115, 65, 161);
     padding: 1em;
+    width: 100%;
 }
 
 #titleContainer {
@@ -17,14 +18,14 @@ body {
 }
 
 #buttonContainer {
-    background: gold;
+    background: rgb(181, 121, 230);
     margin-top: .5em;
     border: .125em solid black;
     border-radius: .25em;
 }
 
 #gifContainer {
-    background: greenyellow;
+    background: rgb(69, 16, 116);
     margin-top: .5em;
     border: .125em solid black;
     border-radius: .25em;
