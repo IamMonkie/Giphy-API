@@ -1,51 +1,75 @@
 $(document).ready(function () {
   createButton();
-})
+  // goButton();
 
-
-let gifs = ["dog", "cat", "birb", "ferret", "monkey"];
-let animalImage = $("<img>");
-let gifDiv = $("<div>");
-//--------------------------------------------------------------------------
-// functions
-
-// fu
-  $(".animal-btn").on("click", function(event) {
+  $("#buttonContainer").on("click", ".animal-btn", function(event) {
     console.log("hit")
     event.preventDefault();
-  
+
     // user Input
-    let animal = $(this).attr("data-animal");
+    let animal = $(this).attr("data-name");
     // Create Query URL
-    let queryURL = "http://api.giphy.com/v1/gifs/search?q=" + animal + "&api_key=etI6oymnFWc2axcUGIrsEv4jRn32lOtK&limit=5";
-  
+    let queryURL = "http://api.giphy.com/v1/gifs/search?q=" + animal + "&api_key=etI6oymnFWc2axcUGIrsEv4jRn32lOtK&limit=10";
+
     $.ajax({
       url: queryURL,
       method: "GET"
     }).then(function(response) {
       // $("#gifContainer").text(JSON.stringify(response));
-      console.log("YAY", queryURL);
+      
 
       let results = response.data;
-
+      var animalDiv = $("<div>");
+      
       $("#gifContainer").prepend(animalImage);
 
       for (let i = 0; i < results.length; i++) {
 
-      // Only taking action if the photo has an appropriate rating
-      if (results[i].rating !== "r" && results[i].rating !== "pg-13") {
+        // Only taking action if the photo has an appropriate rating
+        if (results[i].rating !== "r" && results[i].rating !== "pg-13") {
 
-        animalImage.attr("src", results[i].images.fixed_height.url);
-        
-        gifDiv.append(animalImage);
+          var p = $("<p>").text("Rating: " + results[i].rating);
+          
+          animalImage.attr("src", results[i].images.fixed_height.url);
 
-        // Prepending the gifDiv to the gifContainer in the HTML
-        $("#gifContainer").prepend(gifDiv);
+          animalDiv.append(p);
+          gifDiv.append(animalImage);
+
+          // Prepending the gifDiv to the gifContainer in the HTML
+          $("#gifContainer").prepend(gifDiv);
+          console.log("YAY", gifDiv);
         }
       }
-    }); 
+    });
   });
+
+  $("#gifContainer").on("click", ".animalImage", function(){
+    let state = $(this).attr("data-state");
+    let source = $(this).html("#gif");
+
+    if(state === 'still'){
+
+      let dataAnimate = $(this).attr("data-animate");
+      $(this).attr("src", dataAnimate);
+      $(this).attr("data-state", 'animate');
+    }
+    else if (state === 'animate') {
+
+      let dataStill = $(this).attr('data-still');
+      $(this).attr('src', dataStill);
+      $(this).attr('data-state', 'still');
+    }
+  })
   
+}) // document.ready close
+
+//--------------------------------------------------------------------------
+// functions
+
+let gifs = ["dog", "cat", "birb", "ferret", "monkey"];
+let animalImage = $("<img>");
+let gifDiv = $("<div>");
+
 
 
 function createButton() {
@@ -62,19 +86,17 @@ for (let i = 0; i < gifs.length; i++) {
   }
 }
 
-// gobutton
+// go button
+function goButton() {
+
 $("#searchButton").on("click", function(event) {
   event.preventDefault();
   let animal = $("#animalInput").val().trim();
-console.log(animal)
+  console.log(animal)
   gifs.push(animal);
 
   // Calling renderButtons which handles the processing of our array
   createButton();
-});
 
-
-
-
-
-   
+}); 
+};
